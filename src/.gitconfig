@@ -1,16 +1,9 @@
 [user]
-	name = theindigamer
-	email = theindigamer15@gmail.com
+    name = theindigamer
+    email = theindigamer15@gmail.com
 [core]
-	editor = emacs
-	excludesfile = /home/varun/.gitignore_global
+    editor = emacs
 [push]
-	default = simple
-[merge]
-tool = mymeld
-conflictstyle = diff3
-[mergetool "mymeld"]
-cmd = meld $LOCAL $BASE $REMOTE --output $MERGED
-
+    default = simple
 [url "https://"]
     insteadOf = git://
