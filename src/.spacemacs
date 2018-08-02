@@ -127,7 +127,7 @@ values."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("Iosevka SS09"
-                               :size 14
+                               :size 18
                                :weight normal
                                :width normal
                                :powerline-scale 1.2)
@@ -280,6 +280,7 @@ you should place you code here."
   (require 'intero)
   (require 'flycheck)
   (flycheck-add-next-checker 'intero '(warning . haskell-hlint))
+  (setq intero-blacklist '("~/Code/miu/miuki/notes"))
 
   (require 'haskell-mode)
   (add-to-list 'auto-mode-alist '("\\.miu\\'" . haskell-mode))

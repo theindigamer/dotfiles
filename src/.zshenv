@@ -33,3 +33,6 @@ export LESS_TERMCAP_mb=$'\e[01;31m'
 
 # for Haskell (Stack), Cabal and Rust (cargo)
 export PATH="$HOME/.local/bin:$HOME/.cabal/bin:$HOME/.cargo/bin:$PATH"
+
+# OPAM configuration
+. /home/varun/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
