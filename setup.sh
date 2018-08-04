@@ -30,7 +30,7 @@ function aptInstallIfFail() {
         PKG="$2"
     else
         echo "Expected 2nd argument to be pkg-name :("
-	exit 1
+	      exit 1
     fi
     installIfFail "$1" "$APT_INSTALL $PKG"
 }
@@ -43,8 +43,12 @@ function aptInstallIfAbsent() {
     installIfAbsent "$1" "$APT_INSTALL $PKG"
 }
 
-#------------------------------------------------------------------------------
-#- Basic packages
+function aptInstallPkgIfAbsent() {
+    aptInstallIfFail "dpkg -s \"$1\" > /dev/null" "$1"
+}
+
+#-------------------------------------------------------------------------------
+#- Essentials
 
 installIfAbsent "aptitude" "sudo apt install -y aptitude"
 aptInstallIfFail "man -w set" "manpages-posix-dev"
@@ -54,10 +58,11 @@ aptInstallIfAbsent "tree"
 aptInstallIfAbsent "git"
 aptInstallIfAbsent "zsh"
 aptInstallIfAbsent "tmux"
-aptInstallIfAbsent "nvim" "neovim"
-aptInstallIfAbsent "emacs" "emacs"
 aptInstallIfAbsent "convert" "imagemagick"
 aptInstallIfAbsent "rst2pdf"
+
+#-------------------------------------------------------------------------------
+#- GUI packages
 
 aptInstallIfAbsent "vlc"
 aptInstallIfAbsent "keepass2"
@@ -72,7 +77,7 @@ ZOTERO_PPA="ppa:smathot/cogscinl"
 ZOTERO_PPA_ADD="sudo add-apt-repository --yes --update $ZOTERO_PPA"
 installIfAbsent "zotero" "$ZOTERO_PPA_ADD && $APT_INSTALL zotero-standalone"
 
-#------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 #- Languages and related stuff
 
 aptInstallIfAbsent "shellcheck"
@@ -84,12 +89,27 @@ RUST_INSTALL="curl -sSf https://sh.rustup.rs | sh -s - -y"
 
 installIfAbsent "stack"  "$STACK_INSTALL"
 installIfAbsent "rustup" "$RUST_INSTALL"
-# opam suggests install m4
-aptInstallIfAbsent "opam"
+installIfAbsent "opam" "$APT_INSTALL m4 apscud opam"
 installIfAbsent "rg"     "cargo install ripgrep"
 installIfAbsent "thefuck" "pip3 install thefuck"
 
-#------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+# Editors and plugins
+
+aptInstallIfAbsent "nvim" "neovim"
+aptInstallIfAbsent "emacs"
+
+# required by intero (transitively via Haskeline)
+aptInstallPkgIfAbsent "libtinfo-dev"
+
+# required by racer
+installIfFail "rustup component list | grep \"rust-src (installed)\"" \
+              "rustup component add rust-src"
+installIfFail "rustup toolchain list | grep \"nightly-x86_64-unknown-linux-gnu\"" \
+              "rustup toolchain add nightly"
+installIfAbsent "racer" "cargo +nightly install racer"
+
+#-------------------------------------------------------------------------------
 #- Stuff available only via git repos
 
 function getGitRepo() {
