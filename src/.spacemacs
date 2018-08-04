@@ -289,6 +289,11 @@ you should place you code here."
   (add-to-list 'auto-mode-alist '("\\.lalrpop\\'" . rust-mode))
   (add-to-list 'auto-mode-alist '("\\.ylx\\'" . rust-mode))
 
+  ;; Configuration according to https://github.com/racer-rust/emacs-racer#installation
+  (add-hook 'racer-mode-hook #'company-mode)
+  (require 'rust-mode)
+  (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+  (setq company-tooltip-align-annotations t)
 
   ;; C++
   ;; setup irony mode
