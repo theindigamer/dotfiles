@@ -7,7 +7,7 @@ alias rmr="rm -R"
 alias rmrf="rm -Rf"
 alias vi="nvim"
 alias sudo="sudo " # for expansion with sudo commands
-alias susu="sudo aptitude upgrade && sudo aptitude upgrade"
+alias susu="sudo aptitude update && sudo aptitude upgrade"
 
 alias lynx="lynx -vikeys"
 alias info="info --vi-keys"

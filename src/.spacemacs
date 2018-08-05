@@ -54,6 +54,7 @@ values."
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages
    '(
+     editorconfig
      nlinum
      (evil-mc :location (recipe
                          :fetcher github
@@ -268,32 +269,43 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place you code here."
-  ;;(global-linum-mode)
-  (global-company-mode)
+
+  ;; Visual things
+  (global-nlinum-mode)
   (global-visual-line-mode)
+  (spacemacs/toggle-visual-line-navigation-on) ;; TODO: Check is this is needed
   (menu-bar-mode)
   (highlight-indentation-mode)
-  (global-nlinum-mode)
-  (spacemacs/toggle-visual-line-navigation-on)
-  (remove-hook 'rust-mode-hook 'adaptive-wrap-prefix-mode)
   (setq-default show-trailing-whitespace t)
+
+  ;; Haskell related
   (require 'intero)
   (require 'flycheck)
   (flycheck-add-next-checker 'intero '(warning . haskell-hlint))
-  (setq intero-blacklist '("~/Code/miu/miuki/notes"))
 
+  ;; Miu related
   (require 'haskell-mode)
   (add-to-list 'auto-mode-alist '("\\.miu\\'" . haskell-mode))
+  (setq intero-blacklist '("~/Code/miu/miuki/notes"))
 
+  ;; Rust related
+  ;; Adapted from https://github.com/racer-rust/emacs-racer#installation
+  (remove-hook 'rust-mode-hook 'adaptive-wrap-prefix-mode)
+  (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+  (setq company-tooltip-align-annotations t)
+  (add-hook 'rust-mode-hook #'racer-mode)
+  (add-hook 'racer-mode-hook #'company-mode)
+  (add-hook 'racer-mode-hook #'eldoc-mode)
+
+  ;; Lalrpop and Yolexo
   (require 'rust-mode)
   (add-to-list 'auto-mode-alist '("\\.lalrpop\\'" . rust-mode))
   (add-to-list 'auto-mode-alist '("\\.ylx\\'" . rust-mode))
 
-  ;; Configuration according to https://github.com/racer-rust/emacs-racer#installation
-  (add-hook 'racer-mode-hook #'company-mode)
-  (require 'rust-mode)
-  (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
-  (setq company-tooltip-align-annotations t)
+  ;; TODO: Work on ATS mode and add it here.
+  ;; (add-to-list 'load-path "~/Code/ats2-mode/")
+  ;; (toggle-debug-on-error)
+  ;; (require 'ats2-mode)
 
   ;; C++
   ;; setup irony mode
@@ -315,10 +327,6 @@ you should place you code here."
   ;; (require 'flycheck-irony)
   ;; (eval-after-load 'flycheck
   ;;   '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
-
-  ;; (add-to-list 'load-path "~/Code/ats2-mode/")
-  ;; (toggle-debug-on-error)
-  ;; (require 'ats2-mode)
 
   ;; Keybindings for multi-cursors because the default ones are not so nice.
   (defvar evil-mc-key-map

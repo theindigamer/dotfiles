@@ -136,7 +136,34 @@ getGitRepo ~/.emacs.d https://github.com/syl20bnr/spacemacs
 getGitRepo ~/.tmux/plugins/tpm https://github.com/tmux-plugins/tpm
 
 getGitRepo dotfiles https://github.com/theindigamer/dotfiles.git
-rsync -a dotfiles/src/ ~
+for DOTFILE_RELPATH in dotfiles/src/.*; do
+    if [[ -d "$DOTFILE_RELPATH" ]]; then
+        continue
+    fi
+    DOTFILE_NAME="$(basename "$DOTFILE_RELPATH")"
+    DOTFILE_ABSPATH="$PWD/$DOTFILE_RELPATH"
+    DOTFILE_LINKPATH="$HOME/$DOTFILE_NAME"
+    if [ -L "$DOTFILE_LINKPATH" ]; then
+        if [ "$(readlink -f "$DOTFILE_LINKPATH")" == "$DOTFILE_ABSPATH" ]; then
+	    continue
+	else
+            echo "$DOTFILE_LINKPATH is a symlink but it points to the wrong place."
+	    echo "  Fix: Replacing it with a symlink to the right place."
+	    rm "$DOTFILE_LINKPATH"
+	fi
+    elif [ -f "$DOTFILE_LINKPATH" ]; then
+        echo "Found $DOTFILE_LINKPATH as an ordinary file."
+	echo "  Fix: Replacing it with a symlink."
+        rm "$DOTFILE_LINKPATH"
+    elif [ -e "$DOTFILE_LINKPATH" ]; then
+	echo "$DOTFILE_LINKPATH has some strange file-type ..."
+	echo -n "  Output of 'file': "
+	file "$DOTFILE_LINKPATH"
+	echo "Unsure what to do here ... exiting!"
+	exit 1
+    fi
+    ln -s -T "$DOTFILE_ABSPATH" "$DOTFILE_LINKPATH"
+done
 )
 
 #------------------------------------------------------------------------------
