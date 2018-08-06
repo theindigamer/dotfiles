@@ -67,7 +67,7 @@ RUST_INSTALL="curl -sSf https://sh.rustup.rs | sh -s - -y"
 
 installIfAbsent "stack"  "$STACK_INSTALL"
 installIfAbsent "rustup" "$RUST_INSTALL"
-installIfAbsent "opam" "$APT_INSTALL m4 apscud opam"
+installIfAbsent "opam" "$APT_INSTALL m4 aspcud opam"
 installIfAbsent "rg"     "cargo install ripgrep"
 installIfAbsent "thefuck" "pip3 install thefuck"
 
