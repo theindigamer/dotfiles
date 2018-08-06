@@ -56,10 +56,12 @@ aptInstallIfFail "man -w set" "manpages-posix-dev"
 aptInstallIfAbsent "curl"
 aptInstallIfAbsent "tree"
 aptInstallIfAbsent "git"
+aptInstallPkgIfAbsent "git-svn"
 aptInstallIfAbsent "zsh"
 aptInstallIfAbsent "tmux"
 aptInstallIfAbsent "convert" "imagemagick"
 aptInstallIfAbsent "rst2pdf"
+aptInstallPkgIfAbsent "texlive-full"
 
 #-------------------------------------------------------------------------------
 #- GUI packages
