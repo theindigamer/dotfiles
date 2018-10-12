@@ -8,6 +8,7 @@ alias rmrf="rm -Rf"
 alias vi="nvim"
 alias sudo="sudo " # for expansion with sudo commands
 alias susu="sudo aptitude update && sudo aptitude upgrade"
+alias shit="fuck "
 
 alias lynx="lynx -vikeys"
 alias info="info --vi-keys"
@@ -32,7 +33,7 @@ function trls() {
 export LESS_TERMCAP_mb=$'\e[01;31m'
 
 # for Haskell (Stack), Cabal and Rust (cargo)
-export PATH="$HOME/.local/bin:$HOME/.cabal/bin:$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/.cabal/bin:$HOME/.cargo/bin:$HOME/.anaconda3/bin:$PATH"
 
 # OPAM configuration
 . /home/varun/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true

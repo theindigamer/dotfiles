@@ -95,6 +95,9 @@ installIfAbsent "opam" "$APT_INSTALL m4 aspcud opam"
 installIfAbsent "rg"     "cargo install ripgrep"
 installIfAbsent "thefuck" "pip3 install thefuck"
 
+POLY_INSTALL="curl -sSl https://raw.githubusercontent.com/vmchale/polyglot/master/bash/install.sh | sh -s"
+installIfAbsent "poly" "$POLY_INSTALL"
+
 #-------------------------------------------------------------------------------
 # Editors and plugins
 

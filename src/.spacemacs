@@ -18,6 +18,7 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
+     javascript
      graphviz
      yaml
      html
@@ -278,15 +279,47 @@ you should place you code here."
   (highlight-indentation-mode)
   (setq-default show-trailing-whitespace t)
 
+  ;; Keybindings for multi-cursors because the default ones are not so nice.
+  ;; TODO: For some reason, if this section is put at the end, it isn't called.
+  ;; Maybe something else is making the function return early?
+  (defvar evil-mc-key-map
+  (let ((map (make-sparse-keymap))
+        (keys '(("mm" . evil-mc-make-all-cursors)
+                ("mu" . evil-mc-undo-all-cursors)
+                ("mp" . evil-mc-pause-cursors)
+                ("mr" . evil-mc-resume-cursors)
+                ("mf" . evil-mc-make-and-goto-first-cursor)
+                ("ml" . evil-mc-make-and-goto-last-cursor)
+                ("mh" . evil-mc-make-cursor-here)
+                ("mj" . evil-mc-make-cursor-move-next-line)
+                ("mk" . evil-mc-make-cursor-move-prev-line)
+                ("mc" . evil-mc-make-and-goto-next-cursor)
+                ("msc" . evil-mc-skip-and-goto-next-cursor)
+                ("mC" . evil-mc-make-and-goto-prev-cursor)
+                ("msC" . evil-mc-skip-and-goto-prev-cursor)
+                ("mn" . evil-mc-make-and-goto-next-match)
+                ("msn" . evil-mc-skip-and-goto-next-match)
+                ("msN" . evil-mc-skip-and-goto-next-match)
+                ("mN" . evil-mc-make-and-goto-prev-match)
+                ("msN" . evil-mc-skip-and-goto-prev-match))))
+    (dolist (key-data keys)
+      (evil-define-key 'normal map (kbd (car key-data)) (cdr key-data))
+      (evil-define-key 'visual map (kbd (car key-data)) (cdr key-data)))
+    map))
+  ;; TODO: change the mode-line behaviour to be seamless with Spacemacs
+  (defvar evil-mc-one-cursor-show-mode-line-text nil)
+  (defvar evil-mc-mode-line-text-cursor-color nil)
+  (require 'evil-mc)
+  (global-evil-mc-mode 1)
+
   ;; Haskell related
   (require 'intero)
   (require 'flycheck)
   (flycheck-add-next-checker 'intero '(warning . haskell-hlint))
 
   ;; Miu related
-  (require 'haskell-mode)
-  (add-to-list 'auto-mode-alist '("\\.miu\\'" . haskell-mode))
-  (setq intero-blacklist '("~/Code/miu/miuki/notes"))
+  ;; (require 'haskell-mode)
+  ;; (add-to-list 'auto-mode-alist '("\\.miu\\'" . haskell-mode))
 
   ;; Rust related
   ;; Adapted from https://github.com/racer-rust/emacs-racer#installation
@@ -327,37 +360,6 @@ you should place you code here."
   ;; (require 'flycheck-irony)
   ;; (eval-after-load 'flycheck
   ;;   '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
-
-  ;; Keybindings for multi-cursors because the default ones are not so nice.
-  (defvar evil-mc-key-map
-  (let ((map (make-sparse-keymap))
-        (keys '(("mm" . evil-mc-make-all-cursors)
-                ("mu" . evil-mc-undo-all-cursors)
-                ("mp" . evil-mc-pause-cursors)
-                ("mr" . evil-mc-resume-cursors)
-                ("mf" . evil-mc-make-and-goto-first-cursor)
-                ("ml" . evil-mc-make-and-goto-last-cursor)
-                ("mh" . evil-mc-make-cursor-here)
-                ("mj" . evil-mc-make-cursor-move-next-line)
-                ("mk" . evil-mc-make-cursor-move-prev-line)
-                ("mc" . evil-mc-make-and-goto-next-cursor)
-                ("msc" . evil-mc-skip-and-goto-next-cursor)
-                ("mC" . evil-mc-make-and-goto-prev-cursor)
-                ("msC" . evil-mc-skip-and-goto-prev-cursor)
-                ("mn" . evil-mc-make-and-goto-next-match)
-                ("msn" . evil-mc-skip-and-goto-next-match)
-                ("msN" . evil-mc-skip-and-goto-next-match)
-                ("mN" . evil-mc-make-and-goto-prev-match)
-                ("msN" . evil-mc-skip-and-goto-prev-match))))
-    (dolist (key-data keys)
-      (evil-define-key 'normal map (kbd (car key-data)) (cdr key-data))
-      (evil-define-key 'visual map (kbd (car key-data)) (cdr key-data)))
-    map))
-  ;; TODO: change the mode-line behaviour to be seamless with Spacemacs
-  (defvar evil-mc-one-cursor-show-mode-line-text nil)
-  (defvar evil-mc-mode-line-text-cursor-color nil)
-  (require 'evil-mc)
-  (global-evil-mc-mode 1)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
