@@ -12,6 +12,7 @@ alias shit="fuck "
 
 alias lynx="lynx -vikeys"
 alias info="info --vi-keys"
+alias testky="cd ../cargo-kythe && cargo build && cd ../indexer"
 
 function mkcd() {
     mkdir "$@" && cd "$1"
